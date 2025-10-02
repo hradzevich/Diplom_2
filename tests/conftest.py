@@ -15,8 +15,7 @@ def temporary_user():
         "email": data["email"],
         "password": data["password"],
     }
-    login_response = UserMethods.login_user(credentials)
-    access_token = login_response.json().get("accessToken")
+    access_token, _ = UserMethods.login_user(credentials)
 
     if access_token:
         UserMethods.delete_user(access_token)

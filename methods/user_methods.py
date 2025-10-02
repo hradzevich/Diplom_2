@@ -7,11 +7,13 @@ class UserMethods:
     @staticmethod
     @allure.step("Регистрация нового пользователя")
     def register_new_user(data):
-        register_response = requests.post(REGISTER_USER, json=data)
+        headers = {"Content-Type": "application/json"}
+        register_response = requests.post(REGISTER_USER, json=data, headers=headers)
         registered_user_data = None
-        if register_response.json().get("success") == True:
+        response_body = register_response.json()
+        if register_response.status_code in [200, 201] and response_body.get("success") is True:
             registered_user_data = {
-                "email": register_response.json().get("user", {}).get("email"),
+                "email": response_body.get("user", {}).get("email"),
                 "password": data["password"],
             }
         return register_response, registered_user_data
@@ -19,10 +21,13 @@ class UserMethods:
     @staticmethod
     @allure.step("Авторизация пользователя")
     def login_user(data):
+        access_token = None
+        refresh_token = None
         login_response = requests.post(REGISTER_USER, json=data)
-        if login_response.json().get("success") == True:
-            access_token = login_response.json().get("accessToken")
-            refresh_token = login_response.json().get("refreshToken")
+        response_body = login_response.json()
+        if response_body.get("success") == True:
+            access_token = response_body.get("accessToken")
+            refresh_token = response_body.get("refreshToken")
         return access_token, refresh_token
 
     @staticmethod
