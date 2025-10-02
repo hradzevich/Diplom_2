@@ -23,7 +23,7 @@ class UserMethods:
         if login_response.json().get("success") == True:
             access_token = login_response.json().get("accessToken")
             refresh_token = login_response.json().get("refreshToken")
-        return login_response, access_token, refresh_token
+        return access_token, refresh_token
 
     @staticmethod
     @allure.step("Удаление пользователя")
