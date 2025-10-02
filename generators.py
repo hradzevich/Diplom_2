@@ -1,5 +1,5 @@
 from faker import Faker
-import random as r
+
 
 fake = Faker()
 
