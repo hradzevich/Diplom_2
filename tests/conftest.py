@@ -1,6 +1,7 @@
 import pytest
 from generators import *
 from methods.user_methods import UserMethods
+from methods.order_methods import OrderMethods
 from helper import *
 
 
@@ -28,6 +29,15 @@ def registered_user(temporary_user):
 
 # Фикстура, которая авторизует пользователя и возращает access_token
 @pytest.fixture
-def logged_in_user(registered_user):
+def user_access_token(registered_user):
     _, access_token, _ = UserMethods.login_user(registered_user)
     return access_token
+
+
+# Фикстура, которая получает данные об ингредиентах, формирует и
+# возвращает тело запроса для создания заказа и список всех ингредиетов
+@pytest.fixture
+def ingredients_data():
+    ingredients = OrderMethods.get_ingredients()
+    order_ingredients = create_order_with_ingredients_payload(ingredients)
+    return ingredients, order_ingredients
