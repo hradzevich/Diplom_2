@@ -1,6 +1,7 @@
 import pytest
 from generators import *
 from methods.user_methods import UserMethods
+from helper import *
 
 
 # Фикстура, которая генерирует данные для регистрации пользователя и возращает в тест для регистрации
@@ -11,10 +12,7 @@ def temporary_user():
 
     yield data
 
-    credentials = {
-        "email": data["email"],
-        "password": data["password"],
-    }
+    credentials = get_credentials(data)
     _, access_token, _ = UserMethods.login_user(credentials)
 
     if access_token:

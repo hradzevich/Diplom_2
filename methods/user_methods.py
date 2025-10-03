@@ -1,6 +1,7 @@
 import requests
 import allure
 from urls import *
+from helper import get_credentials
 
 
 class UserMethods:
@@ -27,7 +28,7 @@ class UserMethods:
         access_token = None
         refresh_token = None
 
-        payload = {"email": data["email"], "password": data["password"]}
+        payload = get_credentials(data)
         login_response = requests.post(LOGIN_USER, json=payload)
         response_body = login_response.json()
         if response_body.get("success") == True:
