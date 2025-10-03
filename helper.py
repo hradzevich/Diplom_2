@@ -17,3 +17,10 @@ def modify_user_data(original_data, key):
             lower_case=True,
         )
     return data
+
+# Удаляет из копии словаря original_data поле с именем key.
+# Используется для тестирования негативных сценариев
+def prepare_data_without_field(original_data, key):
+    data = original_data.copy()
+    data.pop(key, None)
+    return data

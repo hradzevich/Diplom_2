@@ -3,6 +3,7 @@ import allure
 from methods.user_methods import UserMethods
 from generators import *
 from data import *
+from helper import *
 
 
 @allure.parent_suite("API тесты Stellar Burger")
@@ -66,6 +67,7 @@ class TestRegisterUser:
             assert (
                 register_response.status_code == 403
             ), f"Ожидался статус 403, получили {register_response.status_code}"
+
         response_body = register_response.json()
 
         with allure.step("Проверяем тело ответа"):
@@ -75,4 +77,35 @@ class TestRegisterUser:
             assert "message" in response_body, "В ответе отсутствует ключ 'message'"
             assert (
                 response_body.get("message") == REGISTER_EXISRING_USER_ERROR_MESSAGE
-            ), f"Сообщение в ответе {response_body.get("message")} не совпадает с ожидаемым {REGISTER_EXISRING_USER_ERROR_MESSAGE}"
+            ), f"Сообщение в ответе '{response_body.get("message")}' не совпадает с ожидаемым '{REGISTER_EXISRING_USER_ERROR_MESSAGE}'"
+
+    @allure.title("Ошибка при регистрации пользователя с отсутствующим обязательным полем")
+    @allure.description(
+        "Тест проверяет, что при попытке зарегистрировать пользователя без обязательного поля "
+        "(email, password, name) API возвращает код 403 и корректное сообщение об ошибке"
+    )
+    @pytest.mark.parametrize("key", ["email", "password", "name"])
+    def test_register_new_user_without_requered_field_returns_error(
+        self, key, temporary_user
+    ):
+        with allure.step(f"Регистрация нового пользователя без {key}"):
+            data_with_empty_required = prepare_data_without_field(temporary_user, key)
+            register_response, _ = UserMethods.register_new_user(
+                data_with_empty_required
+            )
+        with allure.step("Проверяем код ответа"):
+            assert (
+                register_response.status_code == 403
+            ), f"Ожидали статус-код 403, получили {register_response.status_code}"
+
+        response_body = register_response.json()
+
+        with allure.step("Проверяем тело ответа"):
+            assert (
+                response_body.get("success") is False
+            ), "Флаг 'success' в ответе не равен False"
+            assert "message" in response_body, "В ответе отсутствует ключ 'message'"
+            assert (
+                response_body.get("message")
+                == REGISTER_USER_WITH_NO_REQUIRED_FIELD_ERROR_MESSAGE
+            ), f"Сообщение в ответе '{response_body.get("message")}' не совпадает с ожидаемым '{REGISTER_USER_WITH_NO_REQUIRED_FIELD_ERROR_MESSAGE}'"
