@@ -1,0 +1,1 @@
+REGISTER_EXISRING_USER_ERROR_MESSAGE = "User already exists"
