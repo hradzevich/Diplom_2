@@ -8,3 +8,5 @@ REGISTER_USER_WITH_NO_REQUIRED_FIELD_ERROR_MESSAGE = (
 )
 
 LOGIN_WITH_WRONG_CREDENTIALS_ERROR_MESSAGE = "email or password are incorrect"
+
+NO_INGREDIENTS_IN_ORDER_ERROR_MESSAGE =  "Ingredient ids must be provided"

@@ -37,7 +37,6 @@ def user_access_token(registered_user):
 # Фикстура, которая получает данные об ингредиентах, формирует и
 # возвращает тело запроса для создания заказа и список всех ингредиетов
 @pytest.fixture
-def ingredients_data():
+def order_ingredients():
     ingredients = OrderMethods.get_ingredients()
-    order_ingredients = create_order_with_ingredients_payload(ingredients)
-    return ingredients, order_ingredients
+    return  create_order_with_ingredients_payload(ingredients)

@@ -14,7 +14,7 @@ class TestRegisterUser:
     @allure.description(
         "Тест проверяет успешную регистрацию нового пользователя через API Stellar Burgers"
     )
-    def test_register_new_user(self, temporary_user):
+    def test_register_new_user_success(self, temporary_user):
         with allure.step("Регистрация нового пользователя"):
             register_response, _ = UserMethods.register_new_user(temporary_user)
 
@@ -47,7 +47,7 @@ class TestRegisterUser:
         "Тест проверяет, что при попытке зарегистрировать пользователя "
         "с данными, которые уже есть в системе, API возвращает статус-код 403 и сообщение об ошибке"
     )
-    def test_register_existing_user_returns_error(
+    def test_register_existing_user_error(
         self, registered_user, temporary_user
     ):
         with allure.step("Получение email ранее зарегистрированного пользователя"):
@@ -87,7 +87,7 @@ class TestRegisterUser:
         "(email, password, name) API возвращает код 403 и корректное сообщение об ошибке"
     )
     @pytest.mark.parametrize("key", ["email", "password", "name"])
-    def test_register_new_user_without_requered_field_returns_error(
+    def test_register_new_user_without_requered_field_error(
         self, key, temporary_user
     ):
         with allure.step(f"Регистрация нового пользователя без {key}"):
