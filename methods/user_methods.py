@@ -9,7 +9,7 @@ class UserMethods:
     @allure.step("Регистрация нового пользователя")
     def register_new_user(data):
         headers = {"Content-Type": "application/json"}
-        register_response = requests.post(REGISTER_USER, json=data, headers=headers)
+        register_response = requests.post(REGISTER_USER_URL, json=data, headers=headers)
         registered_user_data = None
         response_body = register_response.json()
         if (
@@ -29,7 +29,7 @@ class UserMethods:
         refresh_token = None
 
         payload = get_credentials(data)
-        login_response = requests.post(LOGIN_USER, json=payload)
+        login_response = requests.post(LOGIN_USER_URL, json=payload)
         response_body = login_response.json()
         if response_body.get("success") == True:
             access_token = response_body.get("accessToken")
@@ -40,5 +40,5 @@ class UserMethods:
     @allure.step("Удаление пользователя")
     def delete_user(access_token):
         headers = {"Authorization": access_token}
-        delete_user_response = requests.delete(DELETE_USER, headers=headers)
+        delete_user_response = requests.delete(DELETE_USER_URL, headers=headers)
         return delete_user_response
