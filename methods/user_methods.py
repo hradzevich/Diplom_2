@@ -26,15 +26,13 @@ class UserMethods:
     @allure.step("Авторизация пользователя")
     def login_user(data):
         access_token = None
-        refresh_token = None
 
         payload = get_credentials(data)
         login_response = requests.post(LOGIN_USER_URL, json=payload)
         response_body = login_response.json()
         if response_body.get("success") == True:
             access_token = response_body.get("accessToken")
-            refresh_token = response_body.get("refreshToken")
-        return login_response, access_token, refresh_token
+        return login_response, access_token
 
     @staticmethod
     @allure.step("Удаление пользователя")

@@ -17,7 +17,7 @@ class TestLoginUser:
     def test_login_existing_user_success(self, registered_user):
         with allure.step("Логин пользователя"):
             credentials = get_credentials(registered_user)
-            login_response, _, _ = UserMethods.login_user(credentials)
+            login_response, _ = UserMethods.login_user(credentials)
 
         with allure.step("Проверяем статус-код"):
             assert login_response.status_code in [
@@ -55,7 +55,7 @@ class TestLoginUser:
         with allure.step(f"Логин пользователя c неправильным {key}"):
             credentials = get_credentials(registered_user)
             invalid_credentials = modify_user_data(credentials, key)
-            login_response, _, _ = UserMethods.login_user(invalid_credentials)
+            login_response, _ = UserMethods.login_user(invalid_credentials)
 
         with allure.step("Проверяем статус-код"):
             assert login_response.status_code == 401, f"Ожидался статус 401, получили {login_response.status_code}"

@@ -14,7 +14,7 @@ def temporary_user():
     yield data
 
     credentials = get_credentials(data)
-    _, access_token, _ = UserMethods.login_user(credentials)
+    _, access_token = UserMethods.login_user(credentials)
 
     if access_token:
         UserMethods.delete_user(access_token)
@@ -30,12 +30,12 @@ def registered_user(temporary_user):
 # Фикстура, которая авторизует пользователя и возращает access_token
 @pytest.fixture
 def user_access_token(registered_user):
-    _, access_token, _ = UserMethods.login_user(registered_user)
+    _, access_token = UserMethods.login_user(registered_user)
     return access_token
 
 
 # Фикстура, которая получает данные об ингредиентах, формирует и
-# возвращает тело запроса для создания заказа и список всех ингредиетов
+# возвращает тело запроса для создания заказа и список всех ингредиентов
 @pytest.fixture
 def order_ingredients():
     ingredients = OrderMethods.get_ingredients()
