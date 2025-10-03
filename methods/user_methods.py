@@ -11,7 +11,10 @@ class UserMethods:
         register_response = requests.post(REGISTER_USER, json=data, headers=headers)
         registered_user_data = None
         response_body = register_response.json()
-        if register_response.status_code in [200, 201] and response_body.get("success") is True:
+        if (
+            register_response.status_code in [200, 201]
+            and response_body.get("success") is True
+        ):
             registered_user_data = {
                 "email": response_body.get("user", {}).get("email"),
                 "password": data["password"],
@@ -23,12 +26,14 @@ class UserMethods:
     def login_user(data):
         access_token = None
         refresh_token = None
-        login_response = requests.post(REGISTER_USER, json=data)
+
+        payload = {"email": data["email"], "password": data["password"]}
+        login_response = requests.post(LOGIN_USER, json=payload)
         response_body = login_response.json()
         if response_body.get("success") == True:
             access_token = response_body.get("accessToken")
             refresh_token = response_body.get("refreshToken")
-        return access_token, refresh_token
+        return login_response, access_token, refresh_token
 
     @staticmethod
     @allure.step("Удаление пользователя")

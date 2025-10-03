@@ -19,10 +19,10 @@ class TestRegisterUser:
             register_response, _ = UserMethods.register_new_user(temporary_user)
 
         with allure.step("Проверяем статус-код"):
-            assert (
-                register_response.status_code == 201
-                or register_response.status_code == 200
-            ), f"Ожидался статус 200 или 201, получили {register_response.status_code}"
+            assert register_response.status_code in [
+                200,
+                201,
+            ], f"Ожидался статус 200 или 201, получили {register_response.status_code}"
 
         response_body = register_response.json()
 
@@ -79,7 +79,9 @@ class TestRegisterUser:
                 response_body.get("message") == REGISTER_EXISRING_USER_ERROR_MESSAGE
             ), f"Сообщение в ответе '{response_body.get("message")}' не совпадает с ожидаемым '{REGISTER_EXISRING_USER_ERROR_MESSAGE}'"
 
-    @allure.title("Ошибка при регистрации пользователя с отсутствующим обязательным полем")
+    @allure.title(
+        "Ошибка при регистрации пользователя с отсутствующим обязательным полем"
+    )
     @allure.description(
         "Тест проверяет, что при попытке зарегистрировать пользователя без обязательного поля "
         "(email, password, name) API возвращает код 403 и корректное сообщение об ошибке"

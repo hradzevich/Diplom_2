@@ -15,7 +15,7 @@ def temporary_user():
         "email": data["email"],
         "password": data["password"],
     }
-    access_token, _ = UserMethods.login_user(credentials)
+    _, access_token, _ = UserMethods.login_user(credentials)
 
     if access_token:
         UserMethods.delete_user(access_token)
@@ -24,12 +24,12 @@ def temporary_user():
 # Фикстура, которая регистрирует пользователя и возвращает его email и пароль для авторизации
 @pytest.fixture
 def registered_user(temporary_user):
-    _, registered_user_data = UserMethods.register_new_user(temporary_user)
-    return registered_user_data
+    UserMethods.register_new_user(temporary_user)
+    return temporary_user
 
 
 # Фикстура, которая авторизует пользователя и возращает access_token
 @pytest.fixture
 def logged_in_user(registered_user):
-    access_token, _ = UserMethods.login_user(registered_user)
+    _, access_token, _ = UserMethods.login_user(registered_user)
     return access_token
