@@ -14,7 +14,11 @@ def temporary_user():
     yield data
 
     credentials = get_credentials(data)
-    _, access_token = UserMethods.login_user(credentials)
+    login_response = UserMethods.login_user(credentials)
+    response_body = login_response.json()
+    access_token = None
+    if response_body.get("success") == True:
+        access_token = response_body.get("accessToken")
 
     if access_token:
         UserMethods.delete_user(access_token)
@@ -30,7 +34,12 @@ def registered_user(temporary_user):
 # Фикстура, которая авторизует пользователя и возращает access_token
 @pytest.fixture
 def user_access_token(registered_user):
-    _, access_token = UserMethods.login_user(registered_user)
+    credentials = get_credentials(registered_user)
+    login_response = UserMethods.login_user(credentials)
+    response_body = login_response.json()
+    access_token = None
+    if response_body.get("success") == True:
+        access_token = response_body.get("accessToken")
     return access_token
 
 
@@ -39,4 +48,4 @@ def user_access_token(registered_user):
 @pytest.fixture
 def order_ingredients():
     ingredients = OrderMethods.get_ingredients()
-    return  create_order_with_ingredients_payload(ingredients)
+    return create_order_with_ingredients_payload(ingredients)

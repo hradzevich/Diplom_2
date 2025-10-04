@@ -17,7 +17,7 @@ class TestLoginUser:
     def test_login_existing_user_success(self, registered_user):
         with allure.step("Логин пользователя"):
             credentials = get_credentials(registered_user)
-            login_response, _ = UserMethods.login_user(credentials)
+            login_response = UserMethods.login_user(credentials)
 
         with allure.step("Проверяем статус-код"):
             assert login_response.status_code in [
@@ -49,16 +49,16 @@ class TestLoginUser:
         "API возвращает код 401 и корректное сообщение об ошибке."
     )
     @pytest.mark.parametrize("key", ["email", "password"])
-    def test_login_user_with_wrong_login_or_password_error(
-        self, key, registered_user
-    ):
+    def test_login_user_with_wrong_login_or_password_error(self, key, registered_user):
         with allure.step(f"Логин пользователя c неправильным {key}"):
             credentials = get_credentials(registered_user)
             invalid_credentials = modify_user_data(credentials, key)
-            login_response, _ = UserMethods.login_user(invalid_credentials)
+            login_response = UserMethods.login_user(invalid_credentials)
 
         with allure.step("Проверяем статус-код"):
-            assert login_response.status_code == 401, f"Ожидался статус 401, получили {login_response.status_code}"
+            assert (
+                login_response.status_code == 401
+            ), f"Ожидался статус 401, получили {login_response.status_code}"
 
         response_body = login_response.json()
 
@@ -71,4 +71,3 @@ class TestLoginUser:
                 response_body.get("message")
                 == LOGIN_WITH_WRONG_CREDENTIALS_ERROR_MESSAGE
             ), f"Сообщение в ответе '{response_body.get("message")}' не совпадает с ожидаемым '{LOGIN_WITH_WRONG_CREDENTIALS_ERROR_MESSAGE}'"
-

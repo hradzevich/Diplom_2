@@ -1,4 +1,3 @@
-from generators import *
 from faker import Faker
 import random as r
 import string as s

@@ -1,7 +1,6 @@
 import pytest
 import allure
 from methods.user_methods import UserMethods
-from generators import *
 from data import *
 from helper import *
 
@@ -16,7 +15,7 @@ class TestRegisterUser:
     )
     def test_register_new_user_success(self, temporary_user):
         with allure.step("Регистрация нового пользователя"):
-            register_response, _ = UserMethods.register_new_user(temporary_user)
+            register_response = UserMethods.register_new_user(temporary_user)
 
         with allure.step("Проверяем статус-код"):
             assert register_response.status_code in [
@@ -47,9 +46,7 @@ class TestRegisterUser:
         "Тест проверяет, что при попытке зарегистрировать пользователя "
         "с данными, которые уже есть в системе, API возвращает статус-код 403 и сообщение об ошибке"
     )
-    def test_register_existing_user_error(
-        self, registered_user, temporary_user
-    ):
+    def test_register_existing_user_error(self, registered_user, temporary_user):
         with allure.step("Получение email ранее зарегистрированного пользователя"):
             existing_user_email = registered_user["email"]
 
@@ -61,7 +58,7 @@ class TestRegisterUser:
             }
 
         with allure.step("Регистрация нового пользователя с уже используемым email"):
-            register_response, _ = UserMethods.register_new_user(new_user_data)
+            register_response = UserMethods.register_new_user(new_user_data)
 
         with allure.step("Проверяем статус-код"):
             assert (
@@ -87,14 +84,10 @@ class TestRegisterUser:
         "(email, password, name) API возвращает код 403 и корректное сообщение об ошибке"
     )
     @pytest.mark.parametrize("key", ["email", "password", "name"])
-    def test_register_new_user_without_requered_field_error(
-        self, key, temporary_user
-    ):
+    def test_register_new_user_without_requered_field_error(self, key, temporary_user):
         with allure.step(f"Регистрация нового пользователя без {key}"):
             data_with_empty_required = prepare_data_without_field(temporary_user, key)
-            register_response, _ = UserMethods.register_new_user(
-                data_with_empty_required
-            )
+            register_response = UserMethods.register_new_user(data_with_empty_required)
         with allure.step("Проверяем код ответа"):
             assert (
                 register_response.status_code == 403

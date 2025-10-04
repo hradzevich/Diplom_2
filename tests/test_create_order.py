@@ -1,4 +1,3 @@
-import pytest
 import allure
 from methods.order_methods import OrderMethods
 from data import *
