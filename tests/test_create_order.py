@@ -23,10 +23,9 @@ class TestCreateOrder:
             )
 
         with allure.step("Проверяем статус-код"):
-            assert create_order_response.status_code in [
-                200,
-                201,
-            ], f"Ожидался статус 200 или 201, получили {create_order_response.status_code}"
+            assert (
+                create_order_response.status_code == 200
+            ), f"Ожидался статус 200, получили {create_order_response.status_code}"
 
         response_body = create_order_response.json()
 
@@ -51,10 +50,9 @@ class TestCreateOrder:
             create_order_response = OrderMethods.create_new_order(order_ingredients)
 
         with allure.step("Проверяем статус-код"):
-            assert create_order_response.status_code in [
-                401,
-                403,
-            ], f"Ожидался статус 401 или 403, получили {create_order_response.status_code}"
+            assert (
+                create_order_response.status_code == 401
+            ), f"Ожидался статус 401, получили {create_order_response.status_code}"
 
         response_body = create_order_response.json()
 

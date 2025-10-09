@@ -18,10 +18,7 @@ class TestRegisterUser:
             register_response = UserMethods.register_new_user(temporary_user)
 
         with allure.step("Проверяем статус-код"):
-            assert register_response.status_code in [
-                200,
-                201,
-            ], f"Ожидался статус 200 или 201, получили {register_response.status_code}"
+            assert register_response.status_code == 200, f"Ожидался статус 200, получили {register_response.status_code}"
 
         response_body = register_response.json()
 

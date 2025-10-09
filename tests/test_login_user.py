@@ -20,10 +20,9 @@ class TestLoginUser:
             login_response = UserMethods.login_user(credentials)
 
         with allure.step("Проверяем статус-код"):
-            assert login_response.status_code in [
-                200,
-                201,
-            ], f"Ожидался статус 200 или 201, получили {login_response.status_code}"
+            assert (
+                login_response.status_code == 200
+            ), f"Ожидался статус 200, получили {login_response.status_code}"
 
         response_body = login_response.json()
 
